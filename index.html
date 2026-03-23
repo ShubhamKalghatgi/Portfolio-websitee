@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shubham Kalghatgi — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #080c10;
+      --bg2: #0d1117;
+      --surface: #111820;
+      --border: #1e2d3d;
+      --accent: #00d4ff;
+      --accent2: #ff6b35;
+      --gold: #c9a84c;
+      --text: #e8edf2;
+      --muted: #6b7f8e;
+      --mono: 'JetBrains Mono', monospace;
+      --serif: 'Cormorant Garamond', serif;
+      --display: 'Playfair Display', serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* CUSTOM CURSOR */
+    #cursor {
+      width: 12px; height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: screen;
+      transition: transform 0.15s ease;
+    }
+    #cursor-ring {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(0, 212, 255, 0.4);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.4s ease, width 0.3s, height 0.3s;
+    }
+
+    /* NOISE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      background-size: 200px;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.4;
+    }
+
+    /* GRID BACKGROUND */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 20px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(8,12,16,0.95), transparent);
+      backdrop-filter: blur(4px);
+    }
+
+    .nav-logo {
+      font-family: var(--display);
+      font-size: 18px;
+      letter-spacing: 0.05em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex; gap: 36px; list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1px; background: var(--accent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 120px 60px 80px;
+      position: relative; z-index: 1;
+    }
+
+    .hero-inner { max-width: 1100px; margin: 0 auto; width: 100%; }
+
+    .hero-tag {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+      display: flex; align-items: center; gap: 12px;
+      opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 40px; height: 1px; background: var(--accent);
+    }
+
+    .hero-name {
+      font-family: var(--display);
+      font-size: clamp(52px, 8vw, 110px);
+      line-height: 0.95;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+      opacity: 0; animation: fadeUp 0.9s 0.35s forwards;
+    }
+    .hero-name .line2 {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(18px, 3vw, 28px);
+      font-weight: 300;
+      color: var(--gold);
+      margin-top: 20px; margin-bottom: 36px;
+      letter-spacing: 0.05em;
+      opacity: 0; animation: fadeUp 0.9s 0.5s forwards;
+    }
+
+    .hero-desc {
+      max-width: 560px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.9;
+      opacity: 0; animation: fadeUp 0.9s 0.65s forwards;
+    }
+
+    .hero-cta {
+      display: flex; gap: 20px; margin-top: 48px;
+      opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+    }
+
+    .btn {
+      padding: 14px 32px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      background: transparent;
+      transition: all 0.3s;
+      cursor: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--accent);
+      transform: translateX(-100%);
+      transition: transform 0.3s;
+      z-index: -1;
+    }
+    .btn:hover { color: var(--bg); }
+    .btn:hover::before { transform: translateX(0); }
+
+    .btn-ghost {
+      border-color: var(--border);
+      color: var(--muted);
+    }
+    .btn-ghost::before { background: var(--surface); }
+    .btn-ghost:hover { color: var(--text); }
+
+    .hero-stats {
+      display: flex; gap: 48px; margin-top: 72px;
+      padding-top: 40px; border-top: 1px solid var(--border);
+      opacity: 0; animation: fadeUp 0.9s 0.95s forwards;
+    }
+    .stat-num {
+      font-family: var(--display);
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* SCROLLING TICKER */
+    .ticker-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+      background: var(--bg2);
+      position: relative; z-index: 1;
+    }
+    .ticker {
+      display: flex;
+      animation: ticker 30s linear infinite;
+      white-space: nowrap;
+    }
+    .ticker span {
+      display: inline-block;
+      padding: 0 24px;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .ticker span.accent { color: var(--accent); }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 100px 60px;
+      position: relative; z-index: 1;
+    }
+
+    .section-header {
+      display: flex; align-items: baseline; gap: 20px;
+      margin-bottom: 64px;
+    }
+    .section-num {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      color: var(--accent);
+    }
+    .section-title {
+      font-family: var(--display);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ABOUT */
+    #about { background: var(--bg2); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      max-width: 1100px; margin: 0 auto;
+      align-items: start;
+    }
+    .about-text {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 300;
+      line-height: 1.8;
+      color: #c0cdd8;
+    }
+    .about-text strong { color: var(--accent); font-weight: 600; }
+
+    .skills-block { margin-top: 40px; }
+    .skills-category {
+      margin-bottom: 28px;
+    }
+    .skills-cat-label {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .skills-tags {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .skill-tag {
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      background: var(--surface);
+      transition: all 0.3s;
+    }
+    .skill-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0,212,255,0.05);
+    }
+
+    .about-info {
+      display: flex; flex-direction: column; gap: 24px;
+    }
+    .info-card {
+      padding: 28px 32px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .info-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--accent);
+    }
+    .info-card:hover { border-color: var(--accent); }
+    .info-card-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .info-card-value {
+      font-family: var(--serif);
+      font-size: 18px;
+      color: var(--text);
+    }
+    .info-card-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* EXPERIENCE */
+    #experience { max-width: 1100px; margin: 0 auto; }
+    #experience > .section-header { max-width: none; }
+
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+      max-width: 800px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute; left: 0; top: 8px; bottom: 0;
+      width: 1px; background: var(--border);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 56px;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: all 0.6s ease;
+    }
+    .timeline-item.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute; left: -44px; top: 8px;
+      width: 8px; height: 8px;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      background: var(--bg);
+    }
+    .timeline-item::after {
+      content: '';
+      position: absolute; left: -40px; top: 12px;
+      width: 40px; height: 1px;
+      background: var(--border);
+    }
+
+    .tl-date {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .tl-role {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .tl-org {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .tl-desc {
+      color: #8a9ba8;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    /* RESEARCH */
+    #research { background: var(--bg2); }
+    .research-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2px;
+      max-width: 1100px; margin: 0 auto;
+    }
+
+    .research-card {
+      background: var(--surface);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+    .research-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .research-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .research-card:hover { background: #141c24; }
+    .research-card:hover::before { transform: scaleX(1); }
+
+    .research-num {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      color: var(--accent);
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+    .research-topic {
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 16px;
+    }
+    .research-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .research-advisor {
+      margin-top: 20px;
+      font-size: 11px;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+    .research-period {
+      margin-top: 8px;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* PROJECTS */
+    #projects { max-width: 1100px; margin: 0 auto; }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .project-card {
+      border: 1px solid var(--border);
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.3s, background 0.3s;
+    }
+    .project-card.visible { opacity: 1; transform: translateY(0); }
+    .project-card:hover {
+      border-color: var(--accent2);
+      background: rgba(255,107,53,0.03);
+    }
+    .project-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+    .project-title {
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .project-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .project-tag {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 4px 10px;
+      border: 1px solid var(--accent2);
+      color: var(--accent2);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+    }
+
+    /* ACHIEVEMENTS */
+    #achievements { background: var(--bg2); }
+    .achievements-inner { max-width: 1100px; margin: 0 auto; }
+    .ach-list {
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .ach-item {
+      display: flex; align-items: center; gap: 32px;
+      padding: 28px 40px;
+      background: var(--surface);
+      border-left: 2px solid transparent;
+      transition: all 0.3s;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: all 0.6s ease;
+    }
+    .ach-item.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .ach-item:hover { border-left-color: var(--gold); background: #141c24; }
+    .ach-icon { font-size: 24px; flex-shrink: 0; }
+    .ach-text { font-family: var(--serif); font-size: 17px; color: var(--text); }
+    .ach-meta { margin-left: auto; font-size: 11px; color: var(--gold); letter-spacing: 0.1em; flex-shrink: 0; }
+
+    /* CONTACT */
+    #contact {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 100px 60px;
+    }
+    .contact-intro {
+      font-family: var(--serif);
+      font-size: 22px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .contact-big {
+      font-family: var(--display);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 48px;
+    }
+    .contact-links {
+      display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;
+    }
+    .contact-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 28px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      transition: all 0.3s;
+    }
+    .contact-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0,212,255,0.05);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 60px;
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+      background: var(--bg);
+    }
+    footer p { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
+
+    /* LEADERSHIP SECTION */
+    #leadership { max-width: 1100px; margin: 0 auto; }
+    .leadership-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .leadership-card {
+      padding: 36px;
+      border: 1px solid var(--border);
+      position: relative;
+      transition: all 0.4s;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.3s;
+    }
+    .leadership-card.visible { opacity: 1; transform: translateY(0); }
+    .leadership-card:hover { border-color: var(--gold); }
+    .leadership-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .leadership-card:hover::after { transform: scaleX(1); }
+    .lc-role {
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .lc-org {
+      font-size: 11px;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .lc-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      #hero { padding: 100px 24px 60px; }
+      section { padding: 70px 24px; }
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .leadership-grid { grid-template-columns: 1fr; }
+      .hero-stats { flex-wrap: wrap; gap: 32px; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+      #contact { padding: 70px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">SK<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#achievements">Awards</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">Electronics &amp; Instrumentation Engineer</div>
+      <h1 class="hero-name">
+        Shubham<br/>
+        <span class="line2">Kalghatgi</span>
+      </h1>
+      <p class="hero-title">B.E. Student · Researcher · Builder</p>
+      <p class="hero-desc">
+        Fourth-year undergraduate at R.V.C.E Bengaluru with a passion for instrumentation, process control, and sensor systems. Currently interning at Schneider Electric while pursuing research in thin-film gas sensing and image processing.
+      </p>
+      <div class="hero-cta">
+        <a href="#research" class="btn">View Research</a>
+        <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">3+</div>
+          <div class="stat-label">Research Projects</div>
+        </div>
+        <div>
+          <div class="stat-num">8.55</div>
+          <div class="stat-label">CGPA / 10</div>
+        </div>
+        <div>
+          <div class="stat-num">6</div>
+          <div class="stat-label">Languages & Tools</div>
+        </div>
+        <div>
+          <div class="stat-num">2026</div>
+          <div class="stat-label">Graduating Year</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span class="accent">C &amp; C++</span><span>·</span>
+      <span>Python</span><span>·</span>
+      <span class="accent">Verilog / HDL</span><span>·</span>
+      <span>MATLAB</span><span>·</span>
+      <span class="accent">COMSOL</span><span>·</span>
+      <span>ANSYS</span><span>·</span>
+      <span class="accent">VLSI Design</span><span>·</span>
+      <span>Embedded Systems</span><span>·</span>
+      <span class="accent">Control Systems</span><span>·</span>
+      <span>Signal Processing</span><span>·</span>
+      <span class="accent">HVAC / BMS</span><span>·</span>
+      <span>Sensor Systems</span><span>·</span>
+      <!-- Duplicate for seamless scroll -->
+      <span class="accent">C &amp; C++</span><span>·</span>
+      <span>Python</span><span>·</span>
+      <span class="accent">Verilog / HDL</span><span>·</span>
+      <span>MATLAB</span><span>·</span>
+      <span class="accent">COMSOL</span><span>·</span>
+      <span>ANSYS</span><span>·</span>
+      <span class="accent">VLSI Design</span><span>·</span>
+      <span>Embedded Systems</span><span>·</span>
+      <span class="accent">Control Systems</span><span>·</span>
+      <span>Signal Processing</span><span>·</span>
+      <span class="accent">HVAC / BMS</span><span>·</span>
+      <span>Sensor Systems</span><span>·</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-grid">
+      <div>
+        <div class="section-header">
+          <span class="section-num">01</span>
+          <h2 class="section-title">About</h2>
+          <div class="section-line"></div>
+        </div>
+        <p class="about-text">
+          I'm a <strong>fourth-year Electronics & Instrumentation</strong> undergraduate at RVCE Bengaluru, exploring the intersection of core engineering principles, simulation tools, and real-world sensor design. I thrive in research-oriented environments and love turning complex physical phenomena into measurable, actionable systems.
+        </p>
+        <div class="skills-block">
+          <div class="skills-category">
+            <div class="skills-cat-label">Languages</div>
+            <div class="skills-tags">
+              <div class="skill-tag">C</div>
+              <div class="skill-tag">C++</div>
+              <div class="skill-tag">Python</div>
+              <div class="skill-tag">Verilog</div>
+              <div class="skill-tag">HDL</div>
+              <div class="skill-tag">Assembly (ALP)</div>
+            </div>
+          </div>
+          <div class="skills-category">
+            <div class="skills-cat-label">Tools & Software</div>
+            <div class="skills-tags">
+              <div class="skill-tag">COMSOL</div>
+              <div class="skill-tag">ANSYS</div>
+              <div class="skill-tag">MATLAB</div>
+              <div class="skill-tag">LaTeX</div>
+              <div class="skill-tag">Ubuntu</div>
+              <div class="skill-tag">MS Office</div>
+            </div>
+          </div>
+          <div class="skills-category">
+            <div class="skills-cat-label">Domains</div>
+            <div class="skills-tags">
+              <div class="skill-tag">VLSI Design</div>
+              <div class="skill-tag">Control Systems</div>
+              <div class="skill-tag">Embedded Systems</div>
+              <div class="skill-tag">DSP</div>
+              <div class="skill-tag">Sensor Technology</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="about-info">
+        <div class="info-card">
+          <div class="info-card-label">Education</div>
+          <div class="info-card-value">R.V. College of Engineering</div>
+          <div class="info-card-sub">B.E. Electronics & Instrumentation · CGPA 8.55/10</div>
+          <div class="info-card-sub">Nov 2022 – Ongoing</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Current Role</div>
+          <div class="info-card-value">Energy Management Intern</div>
+          <div class="info-card-sub">Schneider Electric, Bengaluru</div>
+          <div class="info-card-sub">Jan 2026 – Ongoing · HVAC & BMS Systems</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Location</div>
+          <div class="info-card-value">Bengaluru, India</div>
+          <div class="info-card-sub">Open to research & engineering roles</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Interests</div>
+          <div class="info-card-value">Process Control · Sensor Design</div>
+          <div class="info-card-sub">Modeling & Simulation · Thin-film Technology</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" style="background: var(--bg);">
+    <div style="max-width:1100px;margin:0 auto;">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-title">Experience</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="tl-date">Jan 2026 — Ongoing</div>
+          <div class="tl-role">Energy Management Intern</div>
+          <div class="tl-org">Schneider Electric · Bengaluru, India</div>
+          <p class="tl-desc">Working on Building Management Systems, designing and developing efficient HVAC systems. Reporting to Avinash Ramnath, Director of Global Engineering Center.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-date">Sep 2024 — Current</div>
+          <div class="tl-role">Student Placement Coordinator</div>
+          <div class="tl-org">Placement Cell, R.V.C.E · Bengaluru, India</div>
+          <p class="tl-desc">Coordinating placement activities for the student body, liaising with companies to facilitate internship and job opportunities. Ensuring smooth communication and efficient scheduling for recruitment drives.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-date">Feb 2024 — Current</div>
+          <div class="tl-role">Co-Founder & Lead Mentor</div>
+          <div class="tl-org">CubeX — Speed Cubing Club, R.V.C.E</div>
+          <p class="tl-desc">Co-founded the Rubik's Cube Club at RVCE and mentored members in speed cubing. Expanded outreach by teaching Rubik's Cube to underprivileged students at a local NGO.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section id="research">
+    <div class="section-header" style="max-width:1100px;margin:0 auto 64px;">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Research</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="research-grid">
+      <div class="research-card">
+        <div class="research-num">R-01</div>
+        <div class="research-topic">Leaf Nutrient Deficiency Detection via Image Processing</div>
+        <p class="research-desc">Developed an image processing tool to detect nutrient deficiencies — Nitrogen, Phosphorus & Potassium — in plant leaves using computer vision techniques.</p>
+        <div class="research-advisor">Dr. Anand Jatti, Associate Professor</div>
+        <div class="research-period">Sep 2025 – Jan 2026</div>
+      </div>
+      <div class="research-card">
+        <div class="research-num">R-02</div>
+        <div class="research-topic">Yttrium-doped ZnO Thin Film Sensor for NO₂ Detection</div>
+        <p class="research-desc">Developing a Yttrium-doped ZnO thin film gas sensor capable of detecting toxic NO₂ at 1–5 ppm concentration levels with enhanced sensitivity.</p>
+        <div class="research-advisor">Dr. Vishnumurthy K.A, Assistant Professor</div>
+        <div class="research-period">Sep 2024 – Ongoing</div>
+      </div>
+      <div class="research-card">
+        <div class="research-num">R-03</div>
+        <div class="research-topic">Parametric Optimization for Tumor Identification via Bio-Heat Equation</div>
+        <p class="research-desc">Used COMSOL and MATLAB to model breast tumors and analyzed thermal responses based on depth and size variations using the Pennes bio-heat equation.</p>
+        <div class="research-advisor">Dr. Rachana S Akki, Assistant Professor</div>
+        <div class="research-period">Nov 2023 – Dec 2023</div>
+      </div>
+      <div class="research-card" style="background: rgba(0,212,255,0.02); border: 1px solid rgba(0,212,255,0.1);">
+        <div class="research-num" style="opacity:1;">CURRENT FOCUS</div>
+        <div class="research-topic" style="color: var(--accent);">Thin-Film Sensor Research</div>
+        <p class="research-desc">Actively developing novel sensor materials and exploring HVAC optimization at Schneider Electric. Seeking opportunities in research-intensive roles in electronics and instrumentation.</p>
+        <div class="research-period" style="color: var(--accent);">2026 and beyond →</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" style="background: var(--bg2);">
+    <div style="max-width:1100px;margin:0 auto;">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-title">Projects</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-icon">☀️</div>
+          <div class="project-title">Quantum Dot Sensitized Solar Cell</div>
+          <p class="project-desc">Fabricated a Dye-Sensitized Solar Cell (DSSC) using TiO₂, ITO glass, and natural dye — exploring low-cost photovoltaic alternatives through materials engineering.</p>
+          <span class="project-tag">Materials · Fabrication</span>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">🤖</div>
+          <div class="project-title">Landmine Detection Rover</div>
+          <p class="project-desc">Built an autonomous rover leveraging Arduino microcontrollers with ultrasonic and inductive sensors to detect buried metallic objects in hazardous terrain.</p>
+          <span class="project-tag">Arduino · Robotics · Sensors</span>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">🌿</div>
+          <div class="project-title">Plant Nutrient Deficiency Analyzer</div>
+          <p class="project-desc">Image processing pipeline in Python to automatically classify and localize NPK nutrient deficiencies in leaf imagery — supporting precision agriculture.</p>
+          <span class="project-tag">Python · Computer Vision</span>
+        </div>
+        <div class="project-card">
+          <div class="project-icon">🏗️</div>
+          <div class="project-title">HVAC System Design — BMS</div>
+          <p class="project-desc">Designing and implementing efficient Heating, Ventilation & Air Conditioning control systems within a Building Management System at Schneider Electric.</p>
+          <span class="project-tag">HVAC · BMS · Control Systems</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEADERSHIP -->
+  <section id="leadership" style="background: var(--bg);">
+    <div style="max-width:1100px;margin:0 auto;">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-title">Leadership</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="leadership-grid">
+        <div class="leadership-card">
+          <div class="lc-role">Student Placement Coordinator</div>
+          <div class="lc-org">Placement Cell · R.V.C.E</div>
+          <p class="lc-desc">Coordinating placement activities, liaising with hiring companies, and scheduling recruitment drives for the student body. Bridge between students and industry.</p>
+        </div>
+        <div class="leadership-card">
+          <div class="lc-role">Co-Founder & Speed Cubing Mentor</div>
+          <div class="lc-org">CubeX Club · R.V.C.E</div>
+          <p class="lc-desc">Founded a campus Rubik's Cube club from scratch. Mentored members in advanced methods and extended the program to NGO outreach, teaching underprivileged students.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACHIEVEMENTS -->
+  <section id="achievements" style="background: var(--bg2);">
+    <div class="achievements-inner">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-title">Achievements</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="ach-list">
+        <div class="ach-item">
+          <div class="ach-icon">🏆</div>
+          <div class="ach-text">Secured <strong style="color:var(--gold);">Rank 6047</strong> in Karnataka CET 2022 — among 212,000 candidates statewide</div>
+          <div class="ach-meta">KCET · 2022</div>
+        </div>
+        <div class="ach-item">
+          <div class="ach-icon">🎯</div>
+          <div class="ach-text">Achieved <strong style="color:var(--gold);">96.625 percentile</strong> in Maharashtra CET 2022 Engineering Entrance</div>
+          <div class="ach-meta">MHT-CET · 2022</div>
+        </div>
+        <div class="ach-item">
+          <div class="ach-icon">🩸</div>
+          <div class="ach-text">Participated in university blood donation camps — 6 June 2023 &amp; 28 June 2024</div>
+          <div class="ach-meta">Community Service</div>
+        </div>
+        <div class="ach-item">
+          <div class="ach-icon">🎲</div>
+          <div class="ach-text">Taught Rubik's Cube to underprivileged students at NGO, Bangalore — 31 May 2024</div>
+          <div class="ach-meta">Outreach · RVCE</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" style="background: var(--bg);">
+    <p class="contact-intro">Let's work together</p>
+    <h2 class="contact-big">Get In Touch</h2>
+    <div class="contact-links">
+      <a href="mailto:shubhaam.r.k@gmail.com" class="contact-link">
+        <span>✉</span> shubhaam.r.k@gmail.com
+      </a>
+      <a href="https://www.linkedin.com/in/shubham-kalghatgi-637830212/" target="_blank" class="contact-link">
+        <span>in</span> LinkedIn Profile
+      </a>
+      <a href="tel:+918433982470" class="contact-link">
+        <span>📱</span> +91 84339 82470
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Shubham Kalghatgi · Bengaluru, India</p>
+    <p>Built with HTML · CSS · JS</p>
+  </footer>
+
+  <script>
+    // CUSTOM CURSOR
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursor-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.transform = `translate(${mx - 6}px, ${my - 6}px)`;
+    });
+
+    function animateRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button, .skill-tag').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform += ' scale(1.5)';
+        ring.style.width = '56px'; ring.style.height = '56px';
+      });
+      el.addEventListener('mouseleave', () => {
+        ring.style.width = '36px'; ring.style.height = '36px';
+      });
+    });
+
+    // SCROLL ANIMATIONS
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.timeline-item, .research-card, .project-card, .ach-item, .leadership-card').forEach(el => {
+      observer.observe(el);
+    });
+
+    // STAGGER research cards
+    document.querySelectorAll('.research-card').forEach((card, i) => {
+      card.style.transitionDelay = `${i * 0.1}s`;
+    });
+    document.querySelectorAll('.project-card').forEach((card, i) => {
+      card.style.transitionDelay = `${i * 0.1}s`;
+    });
+    document.querySelectorAll('.ach-item').forEach((item, i) => {
+      item.style.transitionDelay = `${i * 0.08}s`;
+    });
+
+    // NAV ACTIVE STATE
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 200) current = s.id;
+      });
+      navLinks.forEach(a => {
+        a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--accent)' : '';
+      });
+    });
+  </script>
+</body>
+</html>
